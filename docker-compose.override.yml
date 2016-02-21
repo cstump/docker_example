@@ -1,0 +1,11 @@
+app:
+  
+  # map our application source code, in full, to the application root of our container
+  volumes:
+    - .:/var/www/docker_example
+
+web:
+
+  # use whatever volumes are configured for the app container
+  volumes_from:
+    - app
