@@ -1,0 +1,57 @@
+# configure the build server
+# https://circleci.com/docs/configuration#machine
+machine:  
+
+  # set the time zone to your local so server logs are easy to understand
+  # useful if you SSH into a build (https://circleci.com/docs/ssh-build)
+  timezone: America/Chicago
+  
+  # tell CircleCI that we need Docker (Compose) available for our build
+  services:
+    - docker
+
+  # set the Rails test environment at the server level
+  environment:
+    RAILS_ENV: test
+
+# configure project dependencies
+# https://circleci.com/docs/configuration#dependencies
+dependencies:
+  override:
+    
+    # output information about the docker environment
+    - docker info
+
+    # create a .env file to configure our application container
+    - |
+      cat << VARS > .env
+      SECRET_KEY_TEST=$SECRET_KEY_TEST
+      POSTGRES_DB=$POSTGRES_DB
+      POSTGRES_USER=$POSTGRES_USER
+      VARS
+
+    # build our Docker images
+    - docker-compose build
+
+# configure the database
+# https://circleci.com/docs/configuration#database
+database:
+  pre:
+
+    # boot all containers
+    - docker-compose up -d
+
+    # wait a second to make sure all containers are up and running before the next step
+    - sleep 1
+
+  # create our test DB and load the schema. The DB is named $POSTGRES_DB, as defined in our environment.
+  override:
+    - docker-compose run app rake db:create db:schema:load
+
+# configure the test run
+# https://circleci.com/docs/configuration#test
+test:
+
+  # run the test suite in the application container
+  override:
+    - docker-compose run app rspec spec
