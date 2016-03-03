@@ -4,4 +4,4 @@ This is a bare-bones, dockerized [Ruby on Rails](http://rubyonrails.org) applica
 
 ## Continuous Integration
 
-This application is configured for use on [CircleCI](http://circleci.com), per the article ["Continuous Integration of a Dockerized Rails Application"](http://chrisstump.online/2016/02/10/continuous-integration-of-a-dockerized-rails-application). The last build [![Circle CI](https://circleci.com/gh/cstump/docker_example/tree/circleci_example.svg?style=svg)](https://circleci.com/gh/cstump/docker_example/tree/circleci_example). 
+This application is configured for use on [CircleCI](http://circleci.com), per the article ["Continuous Integration of a Dockerized Rails Application"](http://chrisstump.online/2016/02/10/continuous-integration-docker-rails). The last build [![Circle CI](https://circleci.com/gh/cstump/docker_example/tree/circleci_example.svg?style=svg)](https://circleci.com/gh/cstump/docker_example/tree/circleci_example). 
