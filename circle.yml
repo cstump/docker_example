@@ -1,28 +1,16 @@
-# configure the build server
-# https://circleci.com/docs/configuration#machine
-machine:  
-
-  # set the time zone to your local so server logs are easy to understand
-  # useful if you SSH into a build (https://circleci.com/docs/ssh-build)
+machine:
   timezone: America/Chicago
-  
-  # tell CircleCI that we need Docker (Compose) available for our build
   services:
     - docker
-
-  # set the Rails test environment at the server level
   environment:
     RAILS_ENV: test
 
-# configure project dependencies
-# https://circleci.com/docs/configuration#dependencies
+    # unique identifier used to tag the docker images; fundamental to the deploy script (e.g.75_db4b44b)
+    DEPLOY_TAG: ${CIRCLE_BUILD_NUM}_${CIRCLE_SHA1:0:7}
+
 dependencies:
   override:
-    
-    # output information about the docker environment
     - docker info
-
-    # create a .env file to configure our application container
     - |
       cat << VARS > .env
       SECRET_KEY_TEST=$SECRET_KEY_TEST
@@ -30,28 +18,46 @@ dependencies:
       POSTGRES_USER=$POSTGRES_USER
       VARS
 
-    # build our Docker images
+    # compile assets; assets will be copied into both the web server image and the application server image
+    - bundle install
+    - rake assets:precompile
+
     - docker-compose build
 
-# configure the database
-# https://circleci.com/docs/configuration#database
 database:
   pre:
-
-    # boot all containers
     - docker-compose up -d
-
-    # wait a second to make sure all containers are up and running before the next step
     - sleep 1
-
-  # create our test DB and load the schema. The DB is named $POSTGRES_DB, as defined in our environment.
   override:
     - docker-compose run app rake db:create db:schema:load
 
-# configure the test run
-# https://circleci.com/docs/configuration#test
 test:
-
-  # run the test suite in the application container
   override:
     - docker-compose run app rspec spec
+
+# configure image deployment
+# https://circleci.com/docs/configuration#deployment
+deployment:
+
+  # unique name of this deployment configuration
+  hub:
+    
+    # name of the branch(es) this deployment section applies to
+    branch: master
+
+    commands:      
+      # tag the images we built with a repository name and deploy identifier
+      - docker tag $(docker images | grep dockerexample_app | awk '{ print $3 }') ccstump/dockerexample_app:$DEPLOY_TAG
+      - docker tag $(docker images | grep dockerexample_web | awk '{ print $3 }') ccstump/dockerexample_web:$DEPLOY_TAG
+      - docker tag $(docker images | grep postgres | awk '{ print $3 }') ccstump/dockerexample_db:$DEPLOY_TAG
+
+      # log into Docker Hub so we can push our tagged images
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+
+      # push tagged images
+      - docker push ccstump/dockerexample_app:$DEPLOY_TAG
+      - docker push ccstump/dockerexample_web:$DEPLOY_TAG
+      - docker push ccstump/dockerexample_db:$DEPLOY_TAG
+
+      # run deploy script
+      - rake docker:deploy
