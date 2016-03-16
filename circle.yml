@@ -1,3 +1,9 @@
+general:
+  branches:
+    ignore:
+      # this can be removed
+      - circleci_cd_example 
+
 machine:
   timezone: America/Chicago
   services:
