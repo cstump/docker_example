@@ -23,5 +23,6 @@ group :development do
 end
 
 group :development, :test do
+	gem 'sshkit'
 	gem 'rspec-rails'
 end
