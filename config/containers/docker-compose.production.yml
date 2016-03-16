@@ -1,0 +1,53 @@
+# service configuration for production database (Postgres)
+db:
+
+  # use db image pulled from Docker Hub
+  image: reponame/dockerexample_db:$DEPLOY_TAG
+
+  # persist the database between containers by storing it in a volume
+  volumes:
+    - docker-example-postgres:/var/lib/postgresql/data
+
+# service configuration for production application server (Unicorn)
+app:
+
+  # use the application server image pulled from Docker Hub
+  image: reponame/dockerexample_app:$DEPLOY_TAG
+
+  # sources environment variable configuration for our app
+  env_file: .env
+
+  # rely on the RAILS_ENV value of the host machine
+  environment:
+    RAILS_ENV: $RAILS_ENV
+
+  # makes the app container aware of the DB container
+  links:
+    - db
+
+  # persist logs between containers by storing in a volume
+  volumes:
+    - docker-example-logs:/var/www/docker_example/log
+
+  # open webapp port for containers only
+  expose:
+    - '3000'
+
+# service configuration for production web server (Nginx)
+web:
+
+  # use the web server image pulled from Docker Hub
+  image: reponame/dockerexample_web:$DEPLOY_TAG
+
+  # makes the web container aware of the app container
+  links:
+    - app
+
+  # makes the web container aware of the log volume setup by the app container
+  volumes_from:
+    - app
+
+  # expose on the host the port we configured Nginx to bind to
+  ports:
+    - "80:80"
+
