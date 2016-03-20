@@ -26,7 +26,7 @@ dependencies:
 
     # compile assets; assets will be copied into both the web server image and the application server image
     - bundle install
-    - rake assets:precompile
+    - bundle exec rake assets:precompile
 
     - docker-compose build
 
@@ -66,4 +66,4 @@ deployment:
       - docker push ccstump/dockerexample_db:$DEPLOY_TAG
 
       # run deploy script
-      - rake docker:deploy
+      - bundle exec rake docker:deploy
