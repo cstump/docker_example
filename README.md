@@ -8,4 +8,7 @@ This application is configured for use on [CircleCI](http://circleci.com), per t
 
 ## Continuous Deployment
 
-This application is configured for continuous deploys via CircleCI, per the article ["Continuous Deployment of a Dockerized Rails Application"](http://chrisstump.online/2016/03/17/continuous-deployment-docker-rails). 
+This application is configured for continuous deploys via CircleCI, per the article ["Continuous Deployment of a Dockerized Rails Application"](http://chrisstump.online/2016/03/17/continuous-deployment-docker-rails).
+
+
+[![Book session on Codementor](https://cdn.codementor.io/badges/book_session_github.svg)](https://www.codementor.io/cstump?utm_source=github&utm_medium=button&utm_term=cstump&utm_campaign=github) if you need a hand continuously integrating, or deploying, your dockerized Rails app.
