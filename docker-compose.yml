@@ -38,11 +38,16 @@ web:
 
   # build with a different Dockerfile
   dockerfile: config/containers/Dockerfile-nginx
+
+  # disable let's encrypt by default
+  environment:
+    CA_SSL: "false" # change to "true" for production
   
   # makes the web container aware of the app container
   links:
     - app
   
-  # expose the port we configured Nginx to bind to
+  # expose the ports we configured Nginx to bind to
   ports:
     - "80:80"
+    - "443:443"
