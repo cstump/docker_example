@@ -46,6 +46,10 @@ web:
   # makes the web container aware of the app container
   links:
     - app
+
+  # persist SSL certificates
+  volumes:
+    - docker-example-ssl:/var/www/ssl
   
   # expose the ports we configured Nginx to bind to
   ports:
