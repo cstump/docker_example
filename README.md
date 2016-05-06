@@ -4,6 +4,6 @@ This is a bare-bones, dockerized [Ruby on Rails](http://rubyonrails.org) applica
 
 ## Security
 
-This application is configured for HTTPS, per the article ["Let's Encrypt a Dockerized Rails Application"](). Booted containers automatically retrieve or renew free, trusted SSL certificates.
+This application is configured for HTTPS, per the article ["Let's Encrypt a Dockerized Rails Application"](http://chrisstump.online/2016/05/05/lets-encrypt-docker-rails/). Booted containers automatically retrieve or renew free, trusted SSL certificates.
 
 [![Book session on Codementor](https://cdn.codementor.io/badges/book_session_github.svg)](https://www.codementor.io/cstump?utm_source=github&utm_medium=button&utm_term=cstump&utm_campaign=github) if you need a hand securing your dockerized Rails app.
