@@ -17,7 +17,7 @@ setup_letsencrypt() {
   echo "WELLKNOWN=\"$SSL_ROOT/.well-known/acme-challenge\"" >> config.sh
 
   # fetch stable version of letsencrypt.sh
-  curl "https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/v0.1.0/letsencrypt.sh" > letsencrypt.sh
+  curl "https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/v0.2.0/letsencrypt.sh" > letsencrypt.sh
   chmod 755 letsencrypt.sh
 }
 
